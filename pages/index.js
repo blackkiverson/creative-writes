@@ -1,6 +1,34 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import Message from '../components/message';
+import { useEffect, useState } from 'react';
+import { db } from '../utils/firebase';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import Link from 'next/link';
 
 export default function Home() {
+
+  //Create aa state with all the posts
+  const [allPosts, setAllPosts] = useState([]);
+
+  /**
+   * We're creating a reference to the posts collection in the database, creating a query to order the
+   * posts by timestamp, and then subscribing to the query
+   * @returns An array of objects.
+   */
+  const getPosts = async () => {
+    const collectionRef = collection(db, 'posts');
+    const q = query(collectionRef, orderBy('timestamp', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setAllPosts(snapshot.docs.map((doc) => ({...doc.data(), id: doc.id })));
+    });
+    return unsubscribe;
+  };
+
+  /* It's a React hook that runs the getPosts function when the component mounts. */
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -9,7 +37,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main></main>
+      <div className="my-12 text-lg">
+        <h2>See what other people are saying</h2>
+        {allPosts.map((post) => (
+          <>
+          <Message key={post.id} {...post}>
+            <Link href={{ pathname: '/${post.id}', query: {...post} }}>
+              <button>{post.comments?.length > 0 ? post.comments?.length : 0} Comments</button>
+            </Link>
+          </Message>
+          </>
+        ))}
+      </div>
     </div>
-  )
+  );
 }

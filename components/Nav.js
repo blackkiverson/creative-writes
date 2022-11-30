@@ -13,7 +13,7 @@ export default function Nav() {
         <ul className="flex items-center gap-10">
           {!user && (
             <Link href={"auth/login"} legacyBehavior>
-              <a className="py-2 px-4 text-sm bg-cyan-500 text-white rounded-lg font-medium ml-8">
+              <a className="py-2 px-4 text-sm bg-cyan-500 text-white rounded-full font-medium ml-8">
                 Join Now
               </a>
             </Link>
@@ -21,7 +21,7 @@ export default function Nav() {
           {user && (
             <div className='flex items-counter gap-6'>
               <Link href="/post">
-                <button className="font-medium bg-cyan-500 text-white py-2 px-4 rounded-mg text-sm">
+                <button className="font-medium bg-cyan-500 text-white py-2 px-4 rounded-full text-sm">
                   Make a Post
                 </button>
               </Link>
