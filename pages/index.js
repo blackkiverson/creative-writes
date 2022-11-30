@@ -41,11 +41,14 @@ export default function Home() {
         <h2>See what other people are saying</h2>
         {allPosts.map((post) => (
           <>
-          <Message key={post.id} {...post}>
-            <Link href={{ pathname: '/${post.id}', query: {...post} }}>
-              <button>{post.comments?.length > 0 ? post.comments?.length : 0} Comments</button>
-            </Link>
-          </Message>
+            <Message key={post.id} {...post}>
+              <Link href={{ pathname: "/${post.id}", query: { ...post } }}>
+                <button>
+                  {post.comments?.length > 0 ? post.comments?.length : 0}{" "}
+                  Comments
+                </button>
+              </Link>
+            </Message>
           </>
         ))}
       </div>
